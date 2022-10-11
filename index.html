@@ -8,8 +8,9 @@
     src="https://sandbox.web.squarecdn.com/v1/square.js">
   </script>
   <script>
-    let appId = 'sandbox-sq0idb-M0oKm7-3FvBOVYAxJyMkFQ';
-    let locationId = 'LCB3ZWMN9KMTH';
+    let appId = '';
+    let locationId = '';
+
 
     function buildPaymentRequest(payments) {
       const paymentRequest = payments.paymentRequest({
@@ -42,9 +43,15 @@
       const body = JSON.stringify({
         locationId,
         sourceId: token,
+        "amount": {
+          "value": "1.00",
+          "currency" : "USD"
+        },
+        "cashAppPayToken": token,
+        "cashAppUniqueKey" : "123456"
       });
 
-      const paymentResponse = await fetch('/payment', {
+      const paymentResponse = await fetch('http://localhost:8085/v1/cashApp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,44 +83,20 @@
       statusContainer.style.visibility = 'visible';
     }
 
-    function setCreds(applicationId, location){
-      appId = applicationId;
-      locationId = location;
+    async function getCred(){
+      const response = await fetch("http://localhost:8085/v1/cashAppCred",{
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      ).then(data => {
+        return data.json();
+      });
+      appId = response['appId'];
+      locationId = response['locationId'];
+      return true;
     }
-
-    // async function getCred(){
-    //     const headers = {
-    //         "Content-Type": "application/json",
-    //         "cors" : "no-cors"
-    //     };
-    //     axios.get('http://localhost:8085/v1/cashAppCred', { headers }).then(
-    //         (response) => {
-    //             console.log("this is response" + response);
-    //             console.log(response.body + "this is status text" + response.status.toString());
-    //             var data = JSON.parse(response);
-    //             console.log(data);
-    //             appId = data['appId'];
-    //             locationId = data['locationId'];
-    //         }
-    //     )
-    //
-    //     // var xmlhttp = new XMLHttpRequest();
-    //     // var url = "http://localhost:8085/v1/cashAppCred";
-    //     // // xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-    //     // xmlhttp.open("GET", url);
-    //     // xmlhttp.send();
-    //     // console.log("making calls");
-    //     // console.log("this is response" + xmlhttp.responseText);
-    //     // xmlhttp.onload = () => function() {
-    //     //     if (xmlhttp.status === 200) {
-    //     //         console.log(xmlhttp.responseText + "this is status text" + xmlhttp.status.toString());
-    //     //         var data = JSON.parse(xmlhttp.responseText);
-    //     //         console.log(data);
-    //     //         appId = data['appId'];
-    //     //         locationId = data['locationId'];
-    //     //     }
-    //     // };
-    // }
 
     document.addEventListener('DOMContentLoaded', async function () {
       console.log("this is square " + !window.Square)
@@ -124,10 +107,13 @@
 
       let payments;
       try {
-        // await getCred();
-        console.log("showing button option " + appId + "  " + locationId);
-        payments = window.Square.payments(appId, locationId);
-        console.log("showing completed " + appId + "  " + locationId);
+        var boo = await getCred();
+        console.log("this is "+ boo)
+        if(boo){
+          console.log("showing button option " + appId + "  " + locationId);
+          payments = window.Square.payments(appId, locationId);
+          console.log("showing completed " + appId + "  " + locationId);
+        }
       } catch {
         const statusContainer = document.getElementById(
           'payment-status-container'
@@ -145,9 +131,11 @@
         console.error('Initializing Cash App Pay failed', e);
       }
       if (cashAppPay) {
+        console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
         cashAppPay.addEventListener(
           'ontokenization',
           async function ({ detail }) {
+            console.log("calling cashAppPay ");
             const tokenResult = detail.tokenResult;
             if (tokenResult.status === 'OK') {
               const paymentResults = await createPayment(tokenResult.token);
