@@ -115,14 +115,17 @@
 
       let payments;
       try {
-        // var boo = await getCred();
-        // console.log("this is "+ boo)
-        while (appId.length === 0 && locationId.length === 0) {
-          // do nothing
+        var boo = await getCred();
+        console.log("this is "+ boo)
+        // while (appId.length === 0 && locationId.length === 0) {
+        //   // do nothing
+        // }
+        if(boo){
+          console.log("showing button option " + appId + "  " + locationId);
+          payments = window.Square.payments(appId, locationId);
+          console.log("showing completed " + appId + "  " + locationId);
         }
-        console.log("showing button option " + appId + "  " + locationId);
-        payments = window.Square.payments(appId, locationId);
-        console.log("showing completed " + appId + "  " + locationId);
+
       } catch {
         const statusContainer = document.getElementById(
           'payment-status-container'
