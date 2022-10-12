@@ -11,6 +11,11 @@
     let appId = '';
     let locationId = '';
 
+    function setCreds(applicationId, location){
+      appId = applicationId;
+      locationId = location;
+      Print.postMessage(applicationId + " " + location)
+    }
 
     function buildPaymentRequest(payments) {
       const paymentRequest = payments.paymentRequest({
@@ -110,13 +115,14 @@
 
       let payments;
       try {
-        var boo = await getCred();
-        console.log("this is "+ boo)
-        if(boo){
-          console.log("showing button option " + appId + "  " + locationId);
-          payments = window.Square.payments(appId, locationId);
-          console.log("showing completed " + appId + "  " + locationId);
+        // var boo = await getCred();
+        // console.log("this is "+ boo)
+        while (appId.length === 0 && locationId.length === 0) {
+          // do nothing
         }
+        console.log("showing button option " + appId + "  " + locationId);
+        payments = window.Square.payments(appId, locationId);
+        console.log("showing completed " + appId + "  " + locationId);
       } catch {
         const statusContainer = document.getElementById(
           'payment-status-container'
