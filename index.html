@@ -15,6 +15,7 @@
       appId = applicationId;
       locationId = location;
       Print.postMessage(applicationId + " " + location)
+      setup()
     }
 
     function buildPaymentRequest(payments) {
@@ -117,9 +118,6 @@
       try {
         var boo = await getCred();
         console.log("this is "+ boo)
-        // while (appId.length === 0 && locationId.length === 0) {
-        //   // do nothing
-        // }
         if(boo){
           console.log("showing button option " + appId + "  " + locationId);
           payments = window.Square.payments(appId, locationId);
@@ -169,6 +167,65 @@
         );
       }
     });
+
+    async function setup() {
+      Print.postMessage("setting up")
+      console.log("this is square " + !window.Square)
+      if (!window.Square) {
+        console.log("cant load square");
+        throw new Error('Square.js failed to load properly');
+      }
+
+      let payments;
+      try {
+        // var boo = await getCred();
+        // console.log("this is "+ boo)
+        console.log("showing button option " + appId + "  " + locationId);
+        payments = window.Square.payments(appId, locationId);
+        console.log("showing completed " + appId + "  " + locationId);
+      } catch {
+        const statusContainer = document.getElementById(
+          'payment-status-container'
+        );
+        statusContainer.className = 'missing-credentials';
+        statusContainer.style.visibility = 'visible';
+        return;
+      }
+
+      let cashAppPay;
+      try {
+        console.log("showing cashAppPay " + appId + "  " + locationId);
+        cashAppPay = await initializeCashApp(payments);
+      } catch (e) {
+        console.error('Initializing Cash App Pay failed', e);
+      }
+      if (cashAppPay) {
+        console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
+        cashAppPay.addEventListener(
+          'ontokenization',
+          async function ({ detail }) {
+            console.log("calling cashAppPay ");
+            const tokenResult = detail.tokenResult;
+            if (tokenResult.status === 'OK') {
+              const paymentResults = await createPayment(tokenResult.token);
+
+              displayPaymentResults('SUCCESS');
+              console.debug('Payment Success', paymentResults);
+            } else {
+              let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
+
+              if (tokenResult.errors) {
+                errorMessage += ` and errors: ${JSON.stringify(
+                  tokenResult.errors
+                )}`;
+              }
+              displayPaymentResults('FAILURE');
+              throw new Error(errorMessage);
+            }
+          }
+        );
+      }
+    }
   </script>
 </head>
 <body>
