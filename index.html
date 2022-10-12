@@ -115,23 +115,23 @@
       }
 
       let payments;
-      try {
-        var boo = await getCred();
-        console.log("this is "+ boo)
-        if(boo){
-          console.log("showing button option " + appId + "  " + locationId);
-          payments = window.Square.payments(appId, locationId);
-          console.log("showing completed " + appId + "  " + locationId);
-        }
+      // try {
+        // var boo = await getCred();
+        // console.log("this is "+ boo)
+        // if(boo){
+        //   console.log("showing button option " + appId + "  " + locationId);
+        //   payments = window.Square.payments(appId, locationId);
+        //   console.log("showing completed " + appId + "  " + locationId);
+        // }
 
-      } catch {
-        const statusContainer = document.getElementById(
-          'payment-status-container'
-        );
-        statusContainer.className = 'missing-credentials';
-        statusContainer.style.visibility = 'visible';
-        return;
-      }
+      // } catch {
+      //   const statusContainer = document.getElementById(
+      //     'payment-status-container'
+      //   );
+      //   statusContainer.className = 'missing-credentials';
+      //   statusContainer.style.visibility = 'visible';
+      //   return;
+      // }
 
       let cashAppPay;
       try {
