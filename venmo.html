@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .paypal-button-number1{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<p>Testing</p>
+<!-- Replace "test" with your own sandbox Business account app client ID -->
+<script src="https://www.paypal.com/sdk/js?client-id=AbXjz3mRw67KKmcTfNUuPgxEVal0bMX3NQDa05A69hHhK_3KpeC2iGbJ845nQ1vIkKkKH7rfjzKKJ35B&enable-funding=venmo&currency=USD"></script>
+<!-- Set up a container element for the button -->
+<div id="paypal-button-container"></div>
+<style>
+     .paypal-button-number1{
+        display: none;
+    }
+</style>
+<script>
+    let elements = document.getElementsByClassName("paypal-button-number-3");
+    while (elements.length > 0) elements[0].remove();
+    paypal.Buttons({
+        // Order is created on the server and the order id is returned
+        createOrder: (data, actions) => {
+            return fetch("/api/orders", {
+                method: "post",
+                // use the "body" param to optionally pass additional order information
+                // like product ids or amount
+            })
+                .then((response) => response.json())
+                .then((order) => order.id);
+        },
+        // Finalize the transaction on the server after payer approval
+        onApprove: (data, actions) => {
+            return fetch(`/api/orders/capture`, {
+                method: "post",
+            })
+                .then((response) => response.json())
+                .then((orderData) => {
+                    // Successful capture! For dev/demo purposes:
+                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                    const transaction = orderData.purchase_units[0].payments.captures[0];
+                    // When ready to go live, remove the alert and show a success message within this page. For example:
+                    // const element = document.getElementById('paypal-button-container');
+                    // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                    // Or go to another URL:  actions.redirect('thank_you.html');
+                });
+        }
+    }).render('#paypal-button-container');
+    elements = document.getElementsByClassName("paypal-button-number-3");
+    // print(elements);
+    while (elements.length > 0) elements[0].remove();
+</script>
+</body>
+</html>
