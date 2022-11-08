@@ -10,10 +10,6 @@
 <div id="paypal-button-container"></div>
 <script>
 
-  function showText(text) {
-    document.getElementById("greeting").innerHTML = "text";
-    console.log(text)
-  }
     // Initialize the buttons
     var button = paypal.Buttons({
       fundingSource: paypal.FUNDING.VENMO,
@@ -71,6 +67,13 @@
       });
     }
   // })
+
+</script>
+<script>
+  function showText(text) {
+    document.getElementById("greeting").innerHTML = "text";
+    console.log(text)
+  }
 </script>
 <p id="greeting">Greetings</p>
 </body>
