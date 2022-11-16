@@ -5,14 +5,14 @@
 </head>
 <body>
 <!-- Replace "test" with your own sandbox Business account app client ID -->
-<script src="https://www.paypal.com/sdk/js?client-id=AbXjz3mRw67KKmcTfNUuPgxEVal0bMX3NQDa05A69hHhK_3KpeC2iGbJ845nQ1vIkKkKH7rfjzKKJ35B&enable-funding=venmo&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AeronW6EaFhHwuO8M1I360aF2ELmq2eKDVcShnfQQGWrJPRrE99jbu7uAiNSEesURMTwb4DesOO9gPqK&enable-funding=venmo"></script>
 <!-- Set up a container element for the button -->
 <div id="paypal-button-container"></div>
 <script>
 
     // Initialize the buttons
     var button = paypal.Buttons({
-      fundingSource: paypal.FUNDING.VENMO,
+      // fundingSource: paypal.FUNDING.VENMO,
 
       // set up the transaction
       createOrder: (data, actions) => {
@@ -22,7 +22,8 @@
           purchase_units: [
             {
               amount: {
-                value: "1.00"
+                value: "10.00",
+                currency_code: "USD"
               }
             }
           ]
@@ -66,14 +67,7 @@
         console.error('PayPal Buttons failed to render');
       });
     }
-  // })
-
-    function showText(text) {
-      document.getElementById("greeting").innerHTML = "text";
-      console.log(text)
-    }
 </script>
 
-<p id="greeting">Greetings</p>
 </body>
 </html>
