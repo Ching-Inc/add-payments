@@ -108,6 +108,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', async function () {
+      Print.postMessage("setting up")
       console.log("this is square " + !window.Square)
       if (!window.Square) {
         console.log("cant load square");
