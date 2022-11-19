@@ -209,9 +209,12 @@
             if (tokenResult.status === 'OK') {
               const paymentResults = await createPayment(tokenResult.token);
 
+              Print.postMessage(tokenResult.token);
+
               displayPaymentResults('SUCCESS');
               console.debug('Payment Success', paymentResults);
-            } else {
+            }
+            else {
               let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
 
               if (tokenResult.errors) {
