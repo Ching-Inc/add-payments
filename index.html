@@ -149,7 +149,7 @@
             const tokenResult = detail.tokenResult;
             if (tokenResult.status === 'OK') {
               const paymentResults = await createPayment(tokenResult.token);
-
+              Print.postMessage(tokenResult.token);
               displayPaymentResults('SUCCESS');
               console.debug('Payment Success', paymentResults);
             } else {
