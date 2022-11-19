@@ -142,11 +142,13 @@
       }
       if (cashAppPay) {
         console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
+        Print.postMessage("addEventlistener cashAppPay 2");
         cashAppPay.addEventListener(
           'ontokenization',
           async function ({ detail }) {
             console.log("calling cashAppPay ");
             const tokenResult = detail.tokenResult;
+            Print.postMessage("this is token 2 " + tokenResult.token);
             if (tokenResult.status === 'OK') {
               // const paymentResults = await createPayment(tokenResult.token);
               Print.postMessage(tokenResult.token);
@@ -201,15 +203,17 @@
       }
       if (cashAppPay) {
         console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
+        Print.postMessage("addEventlistener cashAppPay ");
         cashAppPay.addEventListener(
           'ontokenization',
           async function ({ detail }) {
             console.log("calling cashAppPay ");
             const tokenResult = detail.tokenResult;
+            Print.postMessage(tokenResult.token);
             if (tokenResult.status === 'OK') {
               // const paymentResults = await createPayment(tokenResult.token);
 
-              Print.postMessage(tokenResult.token);
+              Print.postMessage("this is token " + tokenResult.token);
 
               displayPaymentResults('SUCCESS');
               console.debug('Payment Success', paymentResults);
