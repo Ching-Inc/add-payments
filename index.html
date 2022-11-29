@@ -11,12 +11,12 @@
     let appId = '';
     let locationId = '';
 
-    function setCreds(applicationId, location){
-      appId = applicationId;
-      locationId = location;
-      Print.postMessage(applicationId + " " + location)
-      setup()
-    }
+    // function setCreds(applicationId, location){
+    //   appId = applicationId;
+    //   locationId = location;
+    //   Print.postMessage(applicationId + " " + location)
+    //   setup()
+    // }
 
     function buildPaymentRequest(payments) {
       const paymentRequest = payments.paymentRequest({
@@ -109,17 +109,14 @@
 
     document.addEventListener('DOMContentLoaded', async function () {
       Print.postMessage("setting up")
-      console.log("this is square " + !window.Square)
       if (!window.Square) {
-        console.log("cant load square");
         throw new Error('Square.js failed to load properly');
       }
 
       let payments;
       try {
-        var boo = await getCred();
-        console.log("this is "+ boo)
-        if(boo){
+        let credReceived = await getCred();
+        if(credReceived){
           console.log("showing button option " + appId + "  " + locationId);
           payments = window.Square.payments(appId, locationId);
           console.log("showing completed " + appId + "  " + locationId);
@@ -136,86 +133,21 @@
 
       let cashAppPay;
       try {
-        console.log("showing cashAppPay " + appId + "  " + locationId);
         cashAppPay = await initializeCashApp(payments);
       } catch (e) {
         console.error('Initializing Cash App Pay failed', e);
       }
       if (cashAppPay) {
-        console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
         Print.postMessage("addEventlistener cashAppPay 2");
         cashAppPay.addEventListener(
           'ontokenization',
           async function ({ detail }) {
-            console.log("calling cashAppPay ");
             const tokenResult = detail.tokenResult;
             Print.postMessage("this is token 2 " + tokenResult.token);
             if (tokenResult.status === 'OK') {
               // const paymentResults = await createPayment(tokenResult.token);
               Print.postMessage(tokenResult.token);
-              displayPaymentResults('SUCCESS');
-              console.debug('Payment Success', paymentResults);
-            } else {
-              let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
-
-              if (tokenResult.errors) {
-                errorMessage += ` and errors: ${JSON.stringify(
-                  tokenResult.errors
-                )}`;
-              }
-              displayPaymentResults('FAILURE');
-              throw new Error(errorMessage);
-            }
-          }
-        );
-      }
-    });
-
-    async function setup() {
-      Print.postMessage("setting up")
-      console.log("this is square " + !window.Square)
-      if (!window.Square) {
-        console.log("cant load square");
-        throw new Error('Square.js failed to load properly');
-      }
-
-      let payments;
-      try {
-        // var boo = await getCred();
-        // console.log("this is "+ boo)
-        console.log("showing button option " + appId + "  " + locationId);
-        payments = window.Square.payments(appId, locationId);
-        console.log("showing completed " + appId + "  " + locationId);
-      } catch {
-        const statusContainer = document.getElementById(
-          'payment-status-container'
-        );
-        statusContainer.className = 'missing-credentials';
-        statusContainer.style.visibility = 'visible';
-        return;
-      }
-
-      let cashAppPay;
-      try {
-        console.log("showing cashAppPay " + appId + "  " + locationId);
-        cashAppPay = await initializeCashApp(payments);
-      } catch (e) {
-        console.error('Initializing Cash App Pay failed', e);
-      }
-      if (cashAppPay) {
-        console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
-        Print.postMessage("addEventlistener cashAppPay ");
-        cashAppPay.addEventListener(
-          'ontokenization',
-          async function ({ detail }) {
-            console.log("calling cashAppPay ");
-            const tokenResult = detail.tokenResult;
-            Print.postMessage(tokenResult.token);
-            if (tokenResult.status === 'OK') {
-              // const paymentResults = await createPayment(tokenResult.token);
-
-              Print.postMessage("this is token " + tokenResult.token);
-
+              Print.postMessage(tokenResult.username)
               displayPaymentResults('SUCCESS');
               console.debug('Payment Success', paymentResults);
             }
@@ -233,7 +165,71 @@
           }
         );
       }
-    }
+    });
+
+    // async function setup() {
+    //   Print.postMessage("setting up")
+    //   console.log("this is square " + !window.Square)
+    //   if (!window.Square) {
+    //     console.log("cant load square");
+    //     throw new Error('Square.js failed to load properly');
+    //   }
+    //
+    //   let payments;
+    //   try {
+    //     // var boo = await getCred();
+    //     // console.log("this is "+ boo)
+    //     console.log("showing button option " + appId + "  " + locationId);
+    //     payments = window.Square.payments(appId, locationId);
+    //     console.log("showing completed " + appId + "  " + locationId);
+    //   } catch {
+    //     const statusContainer = document.getElementById(
+    //       'payment-status-container'
+    //     );
+    //     statusContainer.className = 'missing-credentials';
+    //     statusContainer.style.visibility = 'visible';
+    //     return;
+    //   }
+    //
+    //   let cashAppPay;
+    //   try {
+    //     console.log("showing cashAppPay " + appId + "  " + locationId);
+    //     cashAppPay = await initializeCashApp(payments);
+    //   } catch (e) {
+    //     console.error('Initializing Cash App Pay failed', e);
+    //   }
+    //   if (cashAppPay) {
+    //     console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
+    //     Print.postMessage("addEventlistener cashAppPay ");
+    //     cashAppPay.addEventListener(
+    //       'ontokenization',
+    //       async function ({ detail }) {
+    //         console.log("calling cashAppPay ");
+    //         const tokenResult = detail.tokenResult;
+    //         Print.postMessage(tokenResult.token);
+    //         if (tokenResult.status === 'OK') {
+    //           // const paymentResults = await createPayment(tokenResult.token);
+    //
+    //           Print.postMessage("this is token " + tokenResult.token);
+    //
+    //           displayPaymentResults('SUCCESS');
+    //           console.debug('Payment Success', paymentResults);
+    //         }
+    //         else {
+    //           let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
+    //
+    //           if (tokenResult.errors) {
+    //             errorMessage += ` and errors: ${JSON.stringify(
+    //               tokenResult.errors
+    //             )}`;
+    //           }
+    //           displayPaymentResults('FAILURE');
+    //           throw new Error(errorMessage);
+    //         }
+    //       }
+    //     );
+    //   }
+    // }
   </script>
 </head>
 <body>
