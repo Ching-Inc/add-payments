@@ -143,10 +143,10 @@
           'ontokenization',
           async function ({ detail }) {
             const tokenResult = detail.tokenResult;
-            Print.postMessage("this is token 2 " + tokenResult.token);
+            Print.postMessage("this is key" + tokenResult.token);
             if (tokenResult.status === 'OK') {
               // const paymentResults = await createPayment(tokenResult.token);
-              Print.postMessage(tokenResult.token);
+              Print.postMessage("token " + tokenResult.token);
               Print.postMessage(tokenResult.username)
               displayPaymentResults('SUCCESS');
               console.debug('Payment Success', paymentResults);
