@@ -14,7 +14,7 @@
     // function setCreds(applicationId, location){
     //   appId = applicationId;
     //   locationId = location;
-    //   Print.postMessage(applicationId + " " + location)
+    //   GetWebMessage.postMessage(applicationId + " " + location)
     //   setup()
     // }
 
@@ -108,7 +108,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', async function () {
-      Print.postMessage("setting up")
+      GetWebMessage.postMessage("setting up")
       if (!window.Square) {
         throw new Error('Square.js failed to load properly');
       }
@@ -138,16 +138,16 @@
         console.error('Initializing Cash App Pay failed', e);
       }
       if (cashAppPay) {
-        Print.postMessage("addEventlistener cashAppPay 2");
+        GetWebMessage.postMessage("addEventlistener cashAppPay 2");
         cashAppPay.addEventListener(
           'ontokenization',
           async function ({ detail }) {
             const tokenResult = detail.tokenResult;
-            Print.postMessage("this is key" + tokenResult.token);
+            GetWebMessage.postMessage("this is key" + tokenResult.token);
             if (tokenResult.status === 'OK') {
               // const paymentResults = await createPayment(tokenResult.token);
-              Print.postMessage("token." + tokenResult.token);
-              Print.postMessage(tokenResult.username)
+              GetWebMessage.postMessage("token." + tokenResult.token);
+              GetWebMessage.postMessage(tokenResult.username)
               displayPaymentResults('SUCCESS');
               console.debug('Payment Success', paymentResults);
             }
@@ -168,7 +168,7 @@
     });
 
     // async function setup() {
-    //   Print.postMessage("setting up")
+    //   GetWebMessage.postMessage("setting up")
     //   console.log("this is square " + !window.Square)
     //   if (!window.Square) {
     //     console.log("cant load square");
@@ -200,17 +200,17 @@
     //   }
     //   if (cashAppPay) {
     //     console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
-    //     Print.postMessage("addEventlistener cashAppPay ");
+    //     GetWebMessage.postMessage("addEventlistener cashAppPay ");
     //     cashAppPay.addEventListener(
     //       'ontokenization',
     //       async function ({ detail }) {
     //         console.log("calling cashAppPay ");
     //         const tokenResult = detail.tokenResult;
-    //         Print.postMessage(tokenResult.token);
+    //         GetWebMessage.postMessage(tokenResult.token);
     //         if (tokenResult.status === 'OK') {
     //           // const paymentResults = await createPayment(tokenResult.token);
     //
-    //           Print.postMessage("this is token " + tokenResult.token);
+    //           GetWebMessage.postMessage("this is token " + tokenResult.token);
     //
     //           displayPaymentResults('SUCCESS');
     //           console.debug('Payment Success', paymentResults);
