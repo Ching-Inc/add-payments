@@ -146,11 +146,11 @@
             // GetWebMessage.postMessage("this is key" + tokenResult.token);
             if (tokenResult.status === 'OK') {
               print("token.".concat(tokenResult.token));
-              // const paymentResults = await createPayment(tokenResult.token);
+              const paymentResults = await createPayment(tokenResult.token);
               // GetWebMessage.postMessage("token." + tokenResult.token);
               // GetWebMessage.postMessage(tokenResult.username)
               displayPaymentResults('SUCCESS');
-              // console.debug('Payment Success', paymentResults);
+              console.debug('Payment Success', paymentResults);
             }
             else {
               let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
