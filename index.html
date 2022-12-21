@@ -44,47 +44,47 @@
       return cashAppPay;
     }
 
-    function generateUniqueKey(){
-      let length = 29;
-      const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = ' ';
-        const charactersLength = characters.length;
-        for ( let i = 0; i < length; i++ ) {
-          result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-
-        return result;
-    }
-
-    async function createPayment(token) {
-      console.log("sending payment")
-      const body = JSON.stringify({
-        locationId,
-        sourceId: token,
-        "amount": {
-          "value": "1.00",
-          "currency" : "USD"
-        },
-        "cashAppPayToken": token,
-        "cashAppUniqueKey" : generateUniqueKey()
-      });
-
-      const paymentResponse = await fetch('https://ching-partnership.herokuapp.com/v1/cashApp', {
-        // mode: 'no-cors',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body,
-      });
-
-      if (paymentResponse.ok) {
-        return paymentResponse.json();
-      }
-
-      const errorBody = await paymentResponse.text();
-      throw new Error(errorBody);
-    }
+    // function generateUniqueKey(){
+    //   let length = 29;
+    //   const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    //     let result = ' ';
+    //     const charactersLength = characters.length;
+    //     for ( let i = 0; i < length; i++ ) {
+    //       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    //     }
+    //
+    //     return result;
+    // }
+    //
+    // async function createPayment(token) {
+    //   console.log("sending payment")
+    //   const body = JSON.stringify({
+    //     locationId,
+    //     sourceId: token,
+    //     "amount": {
+    //       "value": "1.00",
+    //       "currency" : "USD"
+    //     },
+    //     "cashAppPayToken": token,
+    //     "cashAppUniqueKey" : generateUniqueKey()
+    //   });
+    //
+    //   const paymentResponse = await fetch('https://ching-partnership.herokuapp.com/v1/cashApp', {
+    //     // mode: 'no-cors',
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body,
+    //   });
+    //
+    //   if (paymentResponse.ok) {
+    //     return paymentResponse.json();
+    //   }
+    //
+    //   const errorBody = await paymentResponse.text();
+    //   throw new Error(errorBody);
+    // }
 
     // status is either SUCCESS or FAILURE;
     function displayPaymentResults(status) {
@@ -120,7 +120,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', async function () {
-      // GetWebMessage.postMessage("setting up")
+      GetWebMessage.postMessage("setting up")
       if (!window.Square) {
         throw new Error('Square.js failed to load properly');
       }
@@ -150,19 +150,19 @@
         console.error('Initializing Cash App Pay failed', e);
       }
       if (cashAppPay) {
-        // GetWebMessage.postMessage("addEventlistener cashAppPay 2");
+        GetWebMessage.postMessage("addEventlistener cashAppPay 2");
         cashAppPay.addEventListener(
           'ontokenization',
           async function ({ detail }) {
             const tokenResult = detail.tokenResult;
-            // GetWebMessage.postMessage("this is key" + tokenResult.token);
+            GetWebMessage.postMessage("this is key" + tokenResult.token);
             if (tokenResult.status === 'OK') {
               print("token.".concat(tokenResult.token));
-              const paymentResults = await createPayment(tokenResult.token);
-              // GetWebMessage.postMessage("token." + tokenResult.token);
-              // GetWebMessage.postMessage(tokenResult.username)
+              // const paymentResults = await createPayment(tokenResult.token);
+              GetWebMessage.postMessage("token." + tokenResult.token);
+              GetWebMessage.postMessage(tokenResult.username)
               displayPaymentResults('SUCCESS');
-              console.debug('Payment Success', paymentResults);
+              // console.debug('Payment Success', paymentResults);
             }
             else {
               let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
