@@ -11,19 +11,12 @@
     let appId = '';
     let locationId = '';
 
-    // function setCreds(applicationId, location){
-    //   appId = applicationId;
-    //   locationId = location;
-    //   GetWebMessage.postMessage(applicationId + " " + location)
-    //   setup()
-    // }
-
     function buildPaymentRequest(payments) {
       const paymentRequest = payments.paymentRequest({
         countryCode: 'US',
         currencyCode: 'USD',
         total: {
-          amount: '1.00',
+          amount: amount,
           label: 'Total',
         },
       });
@@ -43,48 +36,6 @@
       await cashAppPay.attach('#cash-app-pay', buttonOptions);
       return cashAppPay;
     }
-
-    // function generateUniqueKey(){
-    //   let length = 29;
-    //   const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    //     let result = ' ';
-    //     const charactersLength = characters.length;
-    //     for ( let i = 0; i < length; i++ ) {
-    //       result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    //     }
-    //
-    //     return result;
-    // }
-    //
-    // async function createPayment(token) {
-    //   console.log("sending payment")
-    //   const body = JSON.stringify({
-    //     locationId,
-    //     sourceId: token,
-    //     "amount": {
-    //       "value": "1.00",
-    //       "currency" : "USD"
-    //     },
-    //     "cashAppPayToken": token,
-    //     "cashAppUniqueKey" : generateUniqueKey()
-    //   });
-    //
-    //   const paymentResponse = await fetch('https://ching-partnership.herokuapp.com/v1/cashApp', {
-    //     // mode: 'no-cors',
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body,
-    //   });
-    //
-    //   if (paymentResponse.ok) {
-    //     return paymentResponse.json();
-    //   }
-    //
-    //   const errorBody = await paymentResponse.text();
-    //   throw new Error(errorBody);
-    // }
 
     // status is either SUCCESS or FAILURE;
     function displayPaymentResults(status) {
@@ -158,11 +109,9 @@
             GetWebMessage.postMessage("this is key" + tokenResult.token);
             if (tokenResult.status === 'OK') {
               print("token.".concat(tokenResult.token));
-              // const paymentResults = await createPayment(tokenResult.token);
               GetWebMessage.postMessage("token." + tokenResult.token);
               GetWebMessage.postMessage(tokenResult.username)
               displayPaymentResults('SUCCESS');
-              // console.debug('Payment Success', paymentResults);
             }
             else {
               let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
@@ -179,79 +128,29 @@
         );
       }
     });
-
-    // async function setup() {
-    //   GetWebMessage.postMessage("setting up")
-    //   console.log("this is square " + !window.Square)
-    //   if (!window.Square) {
-    //     console.log("cant load square");
-    //     throw new Error('Square.js failed to load properly');
-    //   }
-    //
-    //   let payments;
-    //   try {
-    //     // var boo = await getCred();
-    //     // console.log("this is "+ boo)
-    //     console.log("showing button option " + appId + "  " + locationId);
-    //     payments = window.Square.payments(appId, locationId);
-    //     console.log("showing completed " + appId + "  " + locationId);
-    //   } catch {
-    //     const statusContainer = document.getElementById(
-    //       'payment-status-container'
-    //     );
-    //     statusContainer.className = 'missing-credentials';
-    //     statusContainer.style.visibility = 'visible';
-    //     return;
-    //   }
-    //
-    //   let cashAppPay;
-    //   try {
-    //     console.log("showing cashAppPay " + appId + "  " + locationId);
-    //     cashAppPay = await initializeCashApp(payments);
-    //   } catch (e) {
-    //     console.error('Initializing Cash App Pay failed', e);
-    //   }
-    //   if (cashAppPay) {
-    //     console.log("addEventlistener cashAppPay " + appId + "  " + locationId);
-    //     GetWebMessage.postMessage("addEventlistener cashAppPay ");
-    //     cashAppPay.addEventListener(
-    //       'ontokenization',
-    //       async function ({ detail }) {
-    //         console.log("calling cashAppPay ");
-    //         const tokenResult = detail.tokenResult;
-    //         GetWebMessage.postMessage(tokenResult.token);
-    //         if (tokenResult.status === 'OK') {
-    //           // const paymentResults = await createPayment(tokenResult.token);
-    //
-    //           GetWebMessage.postMessage("this is token " + tokenResult.token);
-    //
-    //           displayPaymentResults('SUCCESS');
-    //           console.debug('Payment Success', paymentResults);
-    //         }
-    //         else {
-    //           let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
-    //
-    //           if (tokenResult.errors) {
-    //             errorMessage += ` and errors: ${JSON.stringify(
-    //               tokenResult.errors
-    //             )}`;
-    //           }
-    //           displayPaymentResults('FAILURE');
-    //           throw new Error(errorMessage);
-    //         }
-    //       }
-    //     );
-    //   }
-    // }
   </script>
 </head>
 <body>
 
 <form id="payment-form">
-  <h2>Pay $1.00</h2>
+  <h2 id="amount">0.00</h2>
   <div id="cash-app-pay"></div>
 </form>
 <div id="payment-status-container"></div>
+
+<script type="text/javascript">
+  let amount = "";
+
+  setSendAmount("1.00")
+  function setSendAmount(sendAmount){
+    amount = sendAmount;
+  }
+
+  showAmount();
+  function showAmount(){
+    document.getElementById("amount").innerHTML  = "Pay $"+amount;
+  }
+</script>
 
 </body>
 </html>
