@@ -10,13 +10,18 @@
   <script>
     let appId = '';
     let locationId = '';
+    let sendAmountValue = "";
+
+    function setSendAmount(sendAmount){
+      sendAmountValue = sendAmount;
+    }
 
     function buildPaymentRequest(payments) {
       const paymentRequest = payments.paymentRequest({
         countryCode: 'US',
         currencyCode: 'USD',
         total: {
-          amount: amount,
+          amount: sendAmountValue,
           label: 'Total',
         },
       });
@@ -141,7 +146,6 @@
 <script type="text/javascript">
   let amount = "";
 
-  setSendAmount("1.00")
   function setSendAmount(sendAmount){
     amount = sendAmount;
   }
