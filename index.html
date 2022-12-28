@@ -146,14 +146,15 @@
 <script type="text/javascript">
   let amount = "";
 
-  function setSendAmount(sendAmount){
-    amount = sendAmount;
-  }
-
-  showAmount();
   function showAmount(){
     document.getElementById("amount").innerHTML  = "Pay $"+amount;
   }
+
+  function setSendAmount(sendAmount){
+    amount = sendAmount;
+    showAmount();
+  }
+
 </script>
 
 </body>
