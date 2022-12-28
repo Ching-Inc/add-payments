@@ -12,9 +12,9 @@
     let locationId = '';
     let sendAmountValue = "";
 
-    function setSendAmount(sendAmount){
-      sendAmountValue = sendAmount;
-    }
+    // function SendAmount(sendAmount){
+    //   sendAmountValue = sendAmount;
+    // }
 
     function buildPaymentRequest(payments) {
       const paymentRequest = payments.paymentRequest({
@@ -144,15 +144,18 @@
 <div id="payment-status-container"></div>
 
 <script type="text/javascript">
-  let amount = "";
 
   function showAmount(){
-    document.getElementById("amount").innerHTML  = "Pay $"+amount;
+    document.getElementById("amount").innerHTML  = "Pay $"+sendAmountValue;
   }
 
   function setSendAmount(sendAmount){
-    amount = sendAmount;
+    sendAmountValue = sendAmount;
     showAmount();
+    window.document.dispatchEvent(new Event("DOMContentLoaded", {
+      bubbles: true,
+      cancelable: true
+    }));
   }
 
 </script>
