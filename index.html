@@ -12,9 +12,9 @@
     let locationId = '';
     let sendAmountValue = "";
 
-    // function SendAmount(sendAmount){
-    //   sendAmountValue = sendAmount;
-    // }
+    function setSendAmountRequest(sendAmount){
+      sendAmountValue = sendAmount;
+    }
 
     function buildPaymentRequest(payments) {
       const paymentRequest = payments.paymentRequest({
@@ -145,12 +145,13 @@
 
 <script type="text/javascript">
 
+  let amount = ""
   function showAmount(){
-    document.getElementById("amount").innerHTML  = "Pay $"+sendAmountValue;
+    document.getElementById("amount").innerHTML  = "Pay $"+amount;
   }
 
   function setSendAmount(sendAmount){
-    sendAmountValue = sendAmount;
+    amount = sendAmount;
     showAmount();
   }
 
