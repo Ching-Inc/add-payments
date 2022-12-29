@@ -21,7 +21,7 @@
         countryCode: 'US',
         currencyCode: 'USD',
         total: {
-          amount: "1.00",
+          amount: sendAmountValue,
           label: 'Total',
         },
       });
@@ -152,10 +152,6 @@
   function setSendAmount(sendAmount){
     sendAmountValue = sendAmount;
     showAmount();
-    // window.document.dispatchEvent(new Event("DOMContentLoaded", {
-    //   bubbles: true,
-    //   cancelable: true
-    // }));
   }
 
 </script>
