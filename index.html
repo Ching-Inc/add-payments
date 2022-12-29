@@ -12,8 +12,9 @@
     let locationId = '';
     let sendAmountValue = "";
 
-    function setSendAmountRequest(sendAmount){
+    function setSendAmount(sendAmount){
       sendAmountValue = sendAmount;
+      // showAmount();
     }
 
     function buildPaymentRequest(payments) {
@@ -145,15 +146,16 @@
 
 <script type="text/javascript">
 
-  let amount = ""
+  // let amount = ""
+  showAmount();
   function showAmount(){
-    document.getElementById("amount").innerHTML  = "Pay $"+amount;
+    document.getElementById("amount").innerHTML  = "Pay $"+sendAmountValue;
   }
 
-  function setSendAmount(sendAmount){
-    amount = sendAmount;
-    showAmount();
-  }
+  // function setSendAmount(sendAmount){
+  //   amount = sendAmount;
+  //   showAmount();
+  // }
 
 </script>
 
