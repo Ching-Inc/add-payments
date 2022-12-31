@@ -21,8 +21,8 @@
         countryCode: 'US',
         currencyCode: 'USD',
         total: {
-          // amount: ""+String(getAmount()),
-          amount: "1.00",
+          amount: String(getAmount()),
+          // amount: "1.00",
           label: 'Total',
         },
       });
@@ -77,7 +77,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', async function () {
-      GetWebMessage.postMessage("setting up")
+      // GetWebMessage.postMessage("setting up")
       if (!window.Square) {
         throw new Error('Square.js failed to load properly');
       }
@@ -146,8 +146,6 @@
 
 <script type="text/javascript">
   let amount = "";
-  // let appId = '';
-  // let locationId = '';
 
   function showAmount(){
     document.getElementById("amount").innerHTML  = "Pay $"+amount;
