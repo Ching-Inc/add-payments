@@ -21,7 +21,7 @@
         countryCode: 'US',
         currencyCode: 'USD',
         total: {
-          amount: sendAmountValue,
+          amount: getAmount(),
           label: 'Total',
         },
       });
@@ -150,6 +150,10 @@
 
   function showAmount(){
     document.getElementById("amount").innerHTML  = "Pay $"+amount;
+  }
+
+  function getAmount(){
+    return amount;
   }
 
   function setSendAmount(sendAmount){
